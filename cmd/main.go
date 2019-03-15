@@ -21,6 +21,7 @@ func main() {
 		Unmarshal: json.Unmarshal,
 	}
 	loggerMiddleware := middleware.LoggerMiddleware{
+		Read:    ioutil.ReadAll,
 		Handler: calculateAPI,
 	}
 	http.Handle("/calculate", loggerMiddleware)

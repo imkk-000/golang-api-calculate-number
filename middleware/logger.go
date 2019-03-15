@@ -2,6 +2,7 @@ package middleware
 
 import (
 	"bytes"
+	"io"
 	"io/ioutil"
 	"log"
 	"net/http"
@@ -9,11 +10,12 @@ import (
 
 // LoggerMiddleware - http middleware for log request body
 type LoggerMiddleware struct {
+	Read    func(reader io.Reader) ([]byte, error)
 	Handler http.Handler
 }
 
 func (middleware LoggerMiddleware) ServeHTTP(responseWriter http.ResponseWriter, request *http.Request) {
-	requestBody, err := ioutil.ReadAll(request.Body)
+	requestBody, err := middleware.Read(request.Body)
 	if err != nil {
 		responseWriter.WriteHeader(http.StatusInternalServerError)
 		return
