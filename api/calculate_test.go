@@ -15,13 +15,13 @@ func TestCalculateAPIRequestMethodPostAndJsonNumber1Is1Number2Is2ShouldBeRespons
 	requestBody := `{"number1": 1, "number2": 2}`
 	request := httptest.NewRequest(http.MethodPost, "/calculate", bytes.NewBufferString(requestBody))
 	responseRecorder := httptest.NewRecorder()
-	api := API{
+	api := CalculateAPI{
 		Read:      ioutil.ReadAll,
 		Unmarshal: json.Unmarshal,
 		Marshal:   json.Marshal,
 	}
 
-	api.CalculateAPI(responseRecorder, request)
+	api.ServeHTTP(responseRecorder, request)
 	response := responseRecorder.Result()
 	actualResponseJson, _ := ioutil.ReadAll(response.Body)
 
@@ -35,13 +35,13 @@ func TestCalculateAPIRequestMethodPostAndJsonNumber1IsMinus1Number1Is2ShouldBeRe
 	requestBody := `{"number1": -1, "number2": 1}`
 	request := httptest.NewRequest(http.MethodPost, "/calculate", bytes.NewBufferString(requestBody))
 	responseRecorder := httptest.NewRecorder()
-	api := API{
+	api := CalculateAPI{
 		Read:      ioutil.ReadAll,
 		Unmarshal: json.Unmarshal,
 		Marshal:   json.Marshal,
 	}
 
-	api.CalculateAPI(responseRecorder, request)
+	api.ServeHTTP(responseRecorder, request)
 	response := responseRecorder.Result()
 	actualResponseJson, _ := ioutil.ReadAll(response.Body)
 
@@ -55,13 +55,13 @@ func TestCalculateAPIRequestMethodPostAndJsonNumberAIs1ShouldBeResponseStatusCod
 	requestBody := `{"number1": A}`
 	request := httptest.NewRequest(http.MethodPost, "/calculate", bytes.NewBufferString(requestBody))
 	responseRecorder := httptest.NewRecorder()
-	api := API{
+	api := CalculateAPI{
 		Read:      ioutil.ReadAll,
 		Unmarshal: json.Unmarshal,
 		Marshal:   json.Marshal,
 	}
 
-	api.CalculateAPI(responseRecorder, request)
+	api.ServeHTTP(responseRecorder, request)
 	response := responseRecorder.Result()
 
 	if expectedStatusCode != response.StatusCode {
@@ -73,13 +73,13 @@ func TestCalculateAPIRequestMethodPostAndReadAllErrorShouldBeResponseStatusCodeI
 	expectedStatusCode := http.StatusInternalServerError
 	request := httptest.NewRequest(http.MethodPost, "/calculate", nil)
 	responseRecorder := httptest.NewRecorder()
-	api := API{
+	api := CalculateAPI{
 		Read:      mockReadError,
 		Unmarshal: json.Unmarshal,
 		Marshal:   json.Marshal,
 	}
 
-	api.CalculateAPI(responseRecorder, request)
+	api.ServeHTTP(responseRecorder, request)
 	response := responseRecorder.Result()
 
 	if expectedStatusCode != response.StatusCode {
@@ -92,13 +92,13 @@ func TestCalculateAPIRequestMethodPostAndMarshalErrorShouldBeResponseStatusCodeI
 	requestBody := `{"number1": -1, "number2": 1}`
 	request := httptest.NewRequest(http.MethodPost, "/calculate", bytes.NewBufferString(requestBody))
 	responseRecorder := httptest.NewRecorder()
-	api := API{
+	api := CalculateAPI{
 		Read:      ioutil.ReadAll,
 		Unmarshal: json.Unmarshal,
 		Marshal:   mockMarshalError,
 	}
 
-	api.CalculateAPI(responseRecorder, request)
+	api.ServeHTTP(responseRecorder, request)
 	response := responseRecorder.Result()
 
 	if expectedStatusCode != response.StatusCode {
@@ -110,13 +110,13 @@ func TestCalculateAPIRequestMethodGetShouldBeNothingResponseStatusCodeNotFound(t
 	expectedStatusCode := http.StatusNotFound
 	request := httptest.NewRequest(http.MethodGet, "/calculate", nil)
 	responseRecorder := httptest.NewRecorder()
-	api := API{
+	api := CalculateAPI{
 		Read:      ioutil.ReadAll,
 		Unmarshal: json.Unmarshal,
 		Marshal:   json.Marshal,
 	}
 
-	api.CalculateAPI(responseRecorder, request)
+	api.ServeHTTP(responseRecorder, request)
 	response := responseRecorder.Result()
 
 	if expectedStatusCode != response.StatusCode {

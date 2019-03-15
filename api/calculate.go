@@ -5,7 +5,7 @@ import (
 	"net/http"
 )
 
-type API struct {
+type CalculateAPI struct {
 	Read      func(reader io.Reader) ([]byte, error)
 	Unmarshal func(data []byte, v interface{}) error
 	Marshal   func(v interface{}) ([]byte, error)
@@ -20,7 +20,7 @@ type responseBodyStruct struct {
 	Result int `json:"result"`
 }
 
-func (api API) CalculateAPI(responseWriter http.ResponseWriter, request *http.Request) {
+func (api CalculateAPI) ServeHTTP(responseWriter http.ResponseWriter, request *http.Request) {
 	if request.Method != http.MethodPost {
 		responseWriter.WriteHeader(http.StatusNotFound)
 		return
