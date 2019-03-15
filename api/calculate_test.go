@@ -69,7 +69,7 @@ func TestCalculateAPIRequestMethodPostAndJsonNumberAIs1ShouldBeResponseStatusCod
 	}
 }
 
-func TestCalculateAPIRequestMethodPostAndReadAllErrorShouldBeResponseStatusCodeStatusInternalServerError(t *testing.T) {
+func TestCalculateAPIRequestMethodPostAndReadAllErrorShouldBeResponseStatusCodeInternalServerError(t *testing.T) {
 	expectedStatusCode := http.StatusInternalServerError
 	request := httptest.NewRequest(http.MethodPost, "/calculate", nil)
 	responseRecorder := httptest.NewRecorder()
@@ -87,7 +87,7 @@ func TestCalculateAPIRequestMethodPostAndReadAllErrorShouldBeResponseStatusCodeS
 	}
 }
 
-func TestCalculateAPIRequestMethodPostAndMarshalErrorShouldBeResponseStatusCodeStatusInternalServerError(t *testing.T) {
+func TestCalculateAPIRequestMethodPostAndMarshalErrorShouldBeResponseStatusCodeInternalServerError(t *testing.T) {
 	expectedStatusCode := http.StatusInternalServerError
 	requestBody := `{"number1": -1, "number2": 1}`
 	request := httptest.NewRequest(http.MethodPost, "/calculate", bytes.NewBufferString(requestBody))
@@ -96,6 +96,24 @@ func TestCalculateAPIRequestMethodPostAndMarshalErrorShouldBeResponseStatusCodeS
 		Read:      ioutil.ReadAll,
 		Unmarshal: json.Unmarshal,
 		Marshal:   mockMarshalError,
+	}
+
+	api.CalculateAPI(responseRecorder, request)
+	response := responseRecorder.Result()
+
+	if expectedStatusCode != response.StatusCode {
+		t.Errorf("expect '%d' but it got '%d'", expectedStatusCode, response.StatusCode)
+	}
+}
+
+func TestCalculateAPIRequestMethodGetShouldBeNothingResponseStatusCodeNotFound(t *testing.T) {
+	expectedStatusCode := http.StatusNotFound
+	request := httptest.NewRequest(http.MethodGet, "/calculate", nil)
+	responseRecorder := httptest.NewRecorder()
+	api := API{
+		Read:      ioutil.ReadAll,
+		Unmarshal: json.Unmarshal,
+		Marshal:   json.Marshal,
 	}
 
 	api.CalculateAPI(responseRecorder, request)

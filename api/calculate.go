@@ -21,6 +21,10 @@ type responseBodyStruct struct {
 }
 
 func (api API) CalculateAPI(responseWriter http.ResponseWriter, request *http.Request) {
+	if request.Method != http.MethodPost {
+		responseWriter.WriteHeader(http.StatusNotFound)
+		return
+	}
 	requestBody, err := api.Read(request.Body)
 	if err != nil {
 		responseWriter.WriteHeader(http.StatusInternalServerError)
