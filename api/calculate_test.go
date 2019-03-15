@@ -3,6 +3,7 @@ package api_test
 import (
 	"bytes"
 	. "calculate-number/api"
+	"encoding/json"
 	"io/ioutil"
 	"net/http"
 	"net/http/httptest"
@@ -14,8 +15,13 @@ func TestCalculateAPIRequestMethodPostAndJsonNumber1Is1Number2Is2ShouldBeRespons
 	requestBody := `{"number1": 1, "number2": 2}`
 	request := httptest.NewRequest(http.MethodPost, "/calculate", bytes.NewBufferString(requestBody))
 	responseRecorder := httptest.NewRecorder()
+	api := API{
+		ReadAll:   ioutil.ReadAll,
+		Unmarshal: json.Unmarshal,
+		Marshal:   json.Marshal,
+	}
 
-	CalculateAPI(responseRecorder, request)
+	api.CalculateAPI(responseRecorder, request)
 	response := responseRecorder.Result()
 	actualResponseJson, _ := ioutil.ReadAll(response.Body)
 
@@ -29,8 +35,13 @@ func TestCalculateAPIRequestMethodPostAndJsonNumber1IsMinus1Number1Is2ShouldBeRe
 	requestBody := `{"number1": -1, "number2": 1}`
 	request := httptest.NewRequest(http.MethodPost, "/calculate", bytes.NewBufferString(requestBody))
 	responseRecorder := httptest.NewRecorder()
+	api := API{
+		ReadAll:   ioutil.ReadAll,
+		Unmarshal: json.Unmarshal,
+		Marshal:   json.Marshal,
+	}
 
-	CalculateAPI(responseRecorder, request)
+	api.CalculateAPI(responseRecorder, request)
 	response := responseRecorder.Result()
 	actualResponseJson, _ := ioutil.ReadAll(response.Body)
 
@@ -44,8 +55,13 @@ func TestCalculateAPIRequestMethodPostAndJsonNumberAIs1ShouldBeResponseStatusCod
 	requestBody := `{"number1": A}`
 	request := httptest.NewRequest(http.MethodPost, "/calculate", bytes.NewBufferString(requestBody))
 	responseRecorder := httptest.NewRecorder()
+	api := API{
+		ReadAll:   ioutil.ReadAll,
+		Unmarshal: json.Unmarshal,
+		Marshal:   json.Marshal,
+	}
 
-	CalculateAPI(responseRecorder, request)
+	api.CalculateAPI(responseRecorder, request)
 	response := responseRecorder.Result()
 
 	if expectedStatusCode != response.StatusCode {

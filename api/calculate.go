@@ -1,8 +1,7 @@
 package api
 
 import (
-	"encoding/json"
-	"io/ioutil"
+	"io"
 	"net/http"
 )
 
@@ -15,14 +14,20 @@ type responseBodyStruct struct {
 	Result int `json:"result"`
 }
 
-func CalculateAPI(responseWriter http.ResponseWriter, request *http.Request) {
-	requestBody, err := ioutil.ReadAll(request.Body)
+type API struct {
+	ReadAll   func(reader io.Reader) ([]byte, error)
+	Unmarshal func(data []byte, v interface{}) error
+	Marshal   func(v interface{}) ([]byte, error)
+}
+
+func (api API) CalculateAPI(responseWriter http.ResponseWriter, request *http.Request) {
+	requestBody, err := api.ReadAll(request.Body)
 	if err != nil {
 		responseWriter.WriteHeader(http.StatusInternalServerError)
 		return
 	}
 	body := requestBodyStruct{}
-	err = json.Unmarshal(requestBody, &body)
+	err = api.Unmarshal(requestBody, &body)
 	if err != nil {
 		responseWriter.WriteHeader(http.StatusBadRequest)
 		return
@@ -30,7 +35,7 @@ func CalculateAPI(responseWriter http.ResponseWriter, request *http.Request) {
 	response := responseBodyStruct{
 		Result: body.Number1 + body.Number2,
 	}
-	responseBodyJSON, err := json.Marshal(response)
+	responseBodyJSON, err := api.Marshal(response)
 	if err != nil {
 		responseWriter.WriteHeader(http.StatusInternalServerError)
 		return
