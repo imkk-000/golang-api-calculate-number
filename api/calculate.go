@@ -5,6 +5,12 @@ import (
 	"net/http"
 )
 
+type API struct {
+	Read      func(reader io.Reader) ([]byte, error)
+	Unmarshal func(data []byte, v interface{}) error
+	Marshal   func(v interface{}) ([]byte, error)
+}
+
 type requestBodyStruct struct {
 	Number1 int `json:"number1"`
 	Number2 int `json:"number2"`
@@ -12,12 +18,6 @@ type requestBodyStruct struct {
 
 type responseBodyStruct struct {
 	Result int `json:"result"`
-}
-
-type API struct {
-	Read      func(reader io.Reader) ([]byte, error)
-	Unmarshal func(data []byte, v interface{}) error
-	Marshal   func(v interface{}) ([]byte, error)
 }
 
 func (api API) CalculateAPI(responseWriter http.ResponseWriter, request *http.Request) {
