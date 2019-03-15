@@ -15,13 +15,13 @@ type responseBodyStruct struct {
 }
 
 type API struct {
-	ReadAll   func(reader io.Reader) ([]byte, error)
+	Read      func(reader io.Reader) ([]byte, error)
 	Unmarshal func(data []byte, v interface{}) error
 	Marshal   func(v interface{}) ([]byte, error)
 }
 
 func (api API) CalculateAPI(responseWriter http.ResponseWriter, request *http.Request) {
-	requestBody, err := api.ReadAll(request.Body)
+	requestBody, err := api.Read(request.Body)
 	if err != nil {
 		responseWriter.WriteHeader(http.StatusInternalServerError)
 		return

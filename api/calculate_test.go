@@ -16,7 +16,7 @@ func TestCalculateAPIRequestMethodPostAndJsonNumber1Is1Number2Is2ShouldBeRespons
 	request := httptest.NewRequest(http.MethodPost, "/calculate", bytes.NewBufferString(requestBody))
 	responseRecorder := httptest.NewRecorder()
 	api := API{
-		ReadAll:   ioutil.ReadAll,
+		Read:      ioutil.ReadAll,
 		Unmarshal: json.Unmarshal,
 		Marshal:   json.Marshal,
 	}
@@ -36,7 +36,7 @@ func TestCalculateAPIRequestMethodPostAndJsonNumber1IsMinus1Number1Is2ShouldBeRe
 	request := httptest.NewRequest(http.MethodPost, "/calculate", bytes.NewBufferString(requestBody))
 	responseRecorder := httptest.NewRecorder()
 	api := API{
-		ReadAll:   ioutil.ReadAll,
+		Read:      ioutil.ReadAll,
 		Unmarshal: json.Unmarshal,
 		Marshal:   json.Marshal,
 	}
@@ -56,7 +56,7 @@ func TestCalculateAPIRequestMethodPostAndJsonNumberAIs1ShouldBeResponseStatusCod
 	request := httptest.NewRequest(http.MethodPost, "/calculate", bytes.NewBufferString(requestBody))
 	responseRecorder := httptest.NewRecorder()
 	api := API{
-		ReadAll:   ioutil.ReadAll,
+		Read:      ioutil.ReadAll,
 		Unmarshal: json.Unmarshal,
 		Marshal:   json.Marshal,
 	}
