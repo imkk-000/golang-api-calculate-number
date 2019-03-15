@@ -17,7 +17,7 @@ func (middleware LoggerMiddleware) ServeHTTP(responseWriter http.ResponseWriter,
 		responseWriter.WriteHeader(http.StatusInternalServerError)
 		return
 	}
-	request.Body = ioutil.NopCloser(bytes.NewBuffer(requestBody))
+	request.Body = ioutil.NopCloser(bytes.NewReader(requestBody))
 	defer log.Println(string(requestBody))
 
 	middleware.Handler.ServeHTTP(responseWriter, request)
