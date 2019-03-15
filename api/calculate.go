@@ -16,9 +16,13 @@ type responseBodyStruct struct {
 }
 
 func CalculateAPI(responseWriter http.ResponseWriter, request *http.Request) {
-	requestBody, _ := ioutil.ReadAll(request.Body)
+	requestBody, err := ioutil.ReadAll(request.Body)
+	if err != nil {
+		responseWriter.WriteHeader(http.StatusInternalServerError)
+		return
+	}
 	body := requestBodyStruct{}
-	err := json.Unmarshal(requestBody, &body)
+	err = json.Unmarshal(requestBody, &body)
 	if err != nil {
 		responseWriter.WriteHeader(http.StatusBadRequest)
 		return
@@ -26,7 +30,11 @@ func CalculateAPI(responseWriter http.ResponseWriter, request *http.Request) {
 	response := responseBodyStruct{
 		Result: body.Number1 + body.Number2,
 	}
-	responseBodyJSON, _ := json.Marshal(response)
+	responseBodyJSON, err := json.Marshal(response)
+	if err != nil {
+		responseWriter.WriteHeader(http.StatusInternalServerError)
+		return
+	}
 
 	responseWriter.WriteHeader(http.StatusOK)
 	responseWriter.Header().Add("Content-Type", "application/json")
