@@ -2,6 +2,7 @@ package main
 
 import (
 	"calculate-number/api"
+	"calculate-number/middleware"
 	"encoding/json"
 	"flag"
 	"fmt"
@@ -19,7 +20,10 @@ func main() {
 		Marshal:   json.Marshal,
 		Unmarshal: json.Unmarshal,
 	}
-	http.Handle("/calculate", calculateAPI)
+	loggerMiddleware := middleware.LoggerMiddleware{
+		Handler: calculateAPI,
+	}
+	http.Handle("/calculate", loggerMiddleware)
 	err := http.ListenAndServe(fmt.Sprintf(":%d", port), nil)
 	log.Fatal(err)
 }
