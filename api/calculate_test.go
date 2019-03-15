@@ -23,3 +23,18 @@ func TestCalculateAPIRequestMethodPostAndJsonNumber1Is1Number2Is2ShouldBeRespons
 		t.Errorf("expect '%s' but it got '%s'", expectedResultJson, string(actualResponseJson))
 	}
 }
+
+func TestCalculateAPIRequestMethodPostAndJsonNumber1IsMinus1Number1Is2ShouldBeResponseJsonResultIs0(t *testing.T) {
+	expectedResultJson := `{"result": 0}`
+	requestBody := []byte(`{"number1": -1, "number2": 1}`)
+	request := httptest.NewRequest(http.MethodPost, "/calculate", bytes.NewBuffer(requestBody))
+	responseRecorder := httptest.NewRecorder()
+
+	CalculateAPI(responseRecorder, request)
+	response := responseRecorder.Result()
+	actualResponseJson, _ := ioutil.ReadAll(response.Body)
+
+	if expectedResultJson != string(actualResponseJson) {
+		t.Errorf("expect '%s' but it got '%s'", expectedResultJson, string(actualResponseJson))
+	}
+}
