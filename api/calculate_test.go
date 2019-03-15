@@ -11,8 +11,8 @@ import (
 
 func TestCalculateAPIRequestMethodPostAndJsonNumber1Is1Number2Is2ShouldBeResponseJsonResultIs3(t *testing.T) {
 	expectedResultJson := `{"result":3}`
-	requestBody := []byte(`{"number1": 1, "number2": 2}`)
-	request := httptest.NewRequest(http.MethodPost, "/calculate", bytes.NewBuffer(requestBody))
+	requestBody := `{"number1": 1, "number2": 2}`
+	request := httptest.NewRequest(http.MethodPost, "/calculate", bytes.NewBufferString(requestBody))
 	responseRecorder := httptest.NewRecorder()
 
 	CalculateAPI(responseRecorder, request)
@@ -26,8 +26,8 @@ func TestCalculateAPIRequestMethodPostAndJsonNumber1Is1Number2Is2ShouldBeRespons
 
 func TestCalculateAPIRequestMethodPostAndJsonNumber1IsMinus1Number1Is2ShouldBeResponseJsonResultIs0(t *testing.T) {
 	expectedResultJson := `{"result":0}`
-	requestBody := []byte(`{"number1": -1, "number2": 1}`)
-	request := httptest.NewRequest(http.MethodPost, "/calculate", bytes.NewBuffer(requestBody))
+	requestBody := `{"number1": -1, "number2": 1}`
+	request := httptest.NewRequest(http.MethodPost, "/calculate", bytes.NewBufferString(requestBody))
 	responseRecorder := httptest.NewRecorder()
 
 	CalculateAPI(responseRecorder, request)
@@ -41,8 +41,8 @@ func TestCalculateAPIRequestMethodPostAndJsonNumber1IsMinus1Number1Is2ShouldBeRe
 
 func TestCalculateAPIRequestMethodPostAndJsonNumberAIs1ShouldBeResponseStatusCodeBadRequest(t *testing.T) {
 	expectedStatusCode := http.StatusBadRequest
-	requestBody := []byte(`{"number1": A}`)
-	request := httptest.NewRequest(http.MethodPost, "/calculate", bytes.NewBuffer(requestBody))
+	requestBody := `{"number1": A}`
+	request := httptest.NewRequest(http.MethodPost, "/calculate", bytes.NewBufferString(requestBody))
 	responseRecorder := httptest.NewRecorder()
 
 	CalculateAPI(responseRecorder, request)
