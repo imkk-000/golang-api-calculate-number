@@ -5,6 +5,7 @@ import (
 	"net/http"
 )
 
+// CalculateAPI - api for calculate number
 type CalculateAPI struct {
 	Read      func(reader io.Reader) ([]byte, error)
 	Unmarshal func(data []byte, v interface{}) error

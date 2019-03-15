@@ -7,6 +7,7 @@ import (
 	"net/http"
 )
 
+// LoggerMiddleware - http middleware for log request body
 type LoggerMiddleware struct {
 	Handler http.Handler
 }
