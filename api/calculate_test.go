@@ -38,3 +38,17 @@ func TestCalculateAPIRequestMethodPostAndJsonNumber1IsMinus1Number1Is2ShouldBeRe
 		t.Errorf("expect '%s' but it got '%s'", expectedResultJson, string(actualResponseJson))
 	}
 }
+
+func TestCalculateAPIRequestMethodPostAndJsonNumberAIs1ShouldBeResponseStatusCodeBadRequest(t *testing.T) {
+	expectedStatusCode := http.StatusBadRequest
+	requestBody := []byte(`{"number1": A}`)
+	request := httptest.NewRequest(http.MethodPost, "/calculate", bytes.NewBuffer(requestBody))
+	responseRecorder := httptest.NewRecorder()
+
+	CalculateAPI(responseRecorder, request)
+	response := responseRecorder.Result()
+
+	if expectedStatusCode != response.StatusCode {
+		t.Errorf("expect '%d' but it got '%d'", expectedStatusCode, response.StatusCode)
+	}
+}
